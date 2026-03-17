@@ -1,0 +1,51 @@
+# docker-compose.yml
+version: '3.9'
+
+services:
+  api:
+    build: .
+    ports:
+      - "8000:8000"
+    env_file: .env
+    depends_on:
+      - db
+      - redis
+    volumes:
+      - .:/app
+    command: uvicorn app.main:app --host 0.0.0.0 --reload
+
+  worker:
+    build: .
+    env_file: .env
+    depends_on:
+      - redis
+      - db
+    command: celery -A app.tasks.celery_app worker --loglevel=info
+
+  flower:
+    build: .
+    env_file: .env
+    ports:
+      - "5555:5555"
+    depends_on:
+      - redis
+    command: celery -A app.tasks.celery_app flower
+
+  db:
+    image: postgres:15
+    environment:
+      POSTGRES_DB: notifica
+      POSTGRES_USER: notifica
+      POSTGRES_PASSWORD: notifica123
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+
+volumes:
+  pgdata:

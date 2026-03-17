@@ -6,9 +6,15 @@ API REST de notificações multi-canal com processamento assíncrono via filas.
 ![Python](https://img.shields.io/badge/python-3.11-blue)
 ![FastAPI](https://img.shields.io/badge/FastAPI-0.100+-green)
 
+## Demo
+
+API em produção: https://notifica-api.onrender.com/docs
+
 ## Sobre o projeto
 
 O Notifica é uma API que permite enviar notificações por múltiplos canais (e-mail, SMS, webhook) de forma assíncrona. O cliente envia uma requisição e recebe resposta imediata — o envio acontece em background via workers Celery, com retry automático em caso de falha.
+
+
 
 ## Funcionalidades
 
